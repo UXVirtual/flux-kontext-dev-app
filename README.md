@@ -6,6 +6,8 @@ This is intended for offline local usage and should not be deployed into a produ
 
 Thanks to Andrew Zhu for his [Medium Article on running Flux.1 Kontext [dev] using Diffusers](https://xhinker.medium.com/run-flux-kontext-using-huggingface-diffusers-in-your-own-gpus-e9ea7cc51b8a).
 
+Please read the `LICENSE` and `NOTICE.md` files in this repository so you understand your rights when using this software.
+
 ## Windows Setup
 
 ### Step 1: Windows 11 Host Configuration
