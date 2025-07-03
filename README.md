@@ -1,6 +1,6 @@
 # Flux Kontext DEV Diffusers
 
-This project containerizes `Flux.1-Kontext-dev` to run on a CUDA compatible host powered by an NVIDIA RTX 4090 series GPU. It provides an API to allow an input image to be transformed via a prompt and will return a coherant, modified output image.
+This project containerizes `Flux.1-Kontext-dev` to run on a CUDA compatible host powered by an NVIDIA RTX 4090 series GPU. It provides an API to allow an input image from disk to be transformed via a prompt and will return a coherant, modified output image.
 
 This is intended for offline local usage and should not be deployed into a production or internet-facing environment!
 
@@ -56,15 +56,12 @@ The included batch file will automatically download the model (~20GB disk space 
 
 For your safety, be sure to only use a token with read only access to the `black-forest-labs/FLUX.1-Kontext-dev` repo!
 
-By default, a cat image hosted on Hugging Face will be edited using a text prompt. The input image and prompt
-can be customized by adjusting the arguments passed into `main.py`.
-
 1. Open Windows commandline to run:
 
 ```
-.\run-flux-docker.bat hf_YOUR_TOKEN_GOES_HERE
+.\run-flux-docker.bat --image_path "C:\Users\User\Documents\cat.jpg" --prompt "a cat in a birthday hat"  hf_YOUR_TOKEN_GOES_HERE
 ```
-Replace `hf_YOUR_TOKEN_HERE` with the actual token you copied.
+Replace `hf_YOUR_TOKEN_HERE` with the actual token you copied. You only need to do this once for the model to download. Subsequent runs don't require the token.
 
 ## TODO
 
