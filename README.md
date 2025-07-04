@@ -82,7 +82,7 @@ curl -X POST 'http://localhost:8000/v1/images/edits' ^
 
 **Response**
 
-The response will have a url to where the image is served by the API:
+The response will have a relative url to where the image is served by the API. The base URL should be [http://127.0.0.1:8000]. Alternately, you can find the image in the `output` subfolder in this project folder:
 
 ```
 {
