@@ -208,3 +208,5 @@ __marimo__/
 
 /output/*
 !/output/.gitkeep
+/inputs/*
+!/inputs/.gitkeep

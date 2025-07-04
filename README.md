@@ -56,12 +56,35 @@ The included batch file will automatically download the model (~20GB disk space 
 
 For your safety, be sure to only use a token with read only access to the `black-forest-labs/FLUX.1-Kontext-dev` repo!
 
-1. Open Windows commandline to run:
+1. Start Docker Desktop.
+
+2. Open Windows commandline to run:
 
 ```
-.\run-flux-docker.bat --image_path "C:\Users\User\Documents\cat.jpg" --prompt "a cat in a birthday hat"  hf_YOUR_TOKEN_GOES_HERE
+.\run-flux-docker.bat --hf_token hf_YOUR_TOKEN_GOES_HERE --timeout 300
 ```
 Replace `hf_YOUR_TOKEN_HERE` with the actual token you copied. You only need to do this once for the model to download. Subsequent runs don't require the token.
+
+The timeout before the model auto-unloads from memory defaults to 5 minutes (300 seconds). This is adjustable depending on the use-case if this is used as part of a multi-step pipeline.
+
+3. Make an HTTP request to the endpoint, specifying the image_path in the container and the prompt, where image_path is a link to the `inputs` subfolder in this project:
+
+```
+curl -X POST "http://localhost:8000/inference" -H "Content-Type: application/json" -d "{
+  \"image_path\": \"/app/host_files/inputs/my_image.png\",
+  \"prompt\": \"a cat wearing a spacesuit, digital art\"
+}"
+```
+
+4. Alternately, use the interactive commandline to trigger images to be processed by the model. Don't include spaces or encapsulate the file path in quotation marks. e.g:
+
+```
+/app/host_files/inputs/image.png "your prompt here"
+```
+
+### OpenAPI Specification
+
+Once the server is started, open a browser window to [http://127.0.0.1:8000/docs] explore the API for this service. You can download the OpenAPI spec in JSON format from [http://127.0.0.1:8000/openapi.json].
 
 ## TODO
 
