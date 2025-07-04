@@ -1,6 +1,6 @@
 # Flux Kontext DEV Diffusers
 
-This project containerizes `Flux.1-Kontext-dev` to run on a CUDA compatible host powered by an NVIDIA RTX 4090 series GPU. It provides an API to allow an input image from disk to be transformed via a prompt and will return a coherant, modified output image.
+This project containerizes `Flux.1-Kontext-dev` to run on a CUDA compatible host powered by an NVIDIA RTX 4090 series GPU. It provides an [OpenAI compatible /images/edits API endpoint](https://platform.openai.com/docs/api-reference/images/createEdit) that takes an input image and prompt and will transform the image, returning a url to a coherant, modified output image. Currently this only supports a single image as an input.
 
 This is intended for offline local usage and should not be deployed into a production or internet-facing environment!
 
@@ -67,13 +67,41 @@ Replace `hf_YOUR_TOKEN_HERE` with the actual token you copied. You only need to 
 
 The timeout before the model auto-unloads from memory defaults to 5 minutes (300 seconds). This is adjustable depending on the use-case if this is used as part of a multi-step pipeline.
 
-3. Make an HTTP request to the endpoint, specifying the image_path in the container and the prompt, where image_path is a link to the `inputs` subfolder in this project:
+3. Make an HTTP request to the endpoint, with multi-part form data, including the input:
+
+**Request**
 
 ```
-curl -X POST "http://localhost:8000/inference" -H "Content-Type: application/json" -d "{
-  \"image_path\": \"/app/host_files/inputs/my_image.png\",
-  \"prompt\": \"a cat wearing a spacesuit, digital art\"
-}"
+curl -X POST 'http://localhost:8000/v1/images/edits' ^
+  -H 'Content-Type: multipart/form-data' ^
+  -H 'Accept: application/json' ^
+  -F 'image=@"/C:/path/to/image/my_cat.jpg"' ^
+  -F 'prompt="a cat wearing a top hat, studio lighting, detailed"'
+  -F 'n="1"'
+```
+
+**Response**
+
+The response will have a url to where the image is served by the API:
+
+```
+{
+  "created": 1751719260,
+  "data": [
+    {
+      "url": "output/20250705_114100_a_cat_wearing_a_top_hat_studio_lighting_deta.png"
+    }
+  ],
+  "usage": {
+      "total_tokens": 15,
+      "input_tokens": 15,
+      "output_tokens": 0,
+      "input_tokens_details": {
+          "text_tokens": 15,
+          "image_tokens": 0
+      }
+  }
+}`
 ```
 
 4. Alternately, use the interactive commandline to trigger images to be processed by the model. Don't include spaces or encapsulate the file path in quotation marks. e.g:
@@ -88,5 +116,4 @@ Once the server is started, open a browser window to [http://127.0.0.1:8000/docs
 
 ## TODO
 
-- Add OpenAI-compatible `images/createEdit` endpoint using FastAPI
 - Allow specifying existing downloaded model weights on host PC

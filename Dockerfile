@@ -18,6 +18,7 @@ RUN pip3 install --no-cache-dir --upgrade \
     sentencepiece \
     protobuf \
     fastapi \
+    python-multipart \
     "uvicorn[standard]"
 
 COPY main.py .

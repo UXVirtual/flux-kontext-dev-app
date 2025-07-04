@@ -1,6 +1,6 @@
 @echo off
 :: This batch script runs the FLUX AI Docker container in INTERACTIVE SERVER mode.
-:: It exposes the FastAPI port and a shared folder for input images.
+:: It correctly exposes the FastAPI port and a shared folder for input images.
 
 :: --- Set Main Variables ---
 SET "IMAGE_NAME=flux-kontext-app"
@@ -10,7 +10,7 @@ SET "OUTPUT_DIR=%SCRIPT_DIR%output"
 SET "MODEL_CACHE_PATH=%CACHE_DIR%\hub\models--black-forest-labs--FLUX.1-Kontext-dev"
 
 :: --- Check if Model Exists and Token is Needed ---
-:: This check is still useful for the very first run.
+:: This check is still useful for the very first run, looking for --hf_token.
 IF NOT EXIST "%MODEL_CACHE_PATH%" (
     echo %* | find "--hf_token" >nul
     IF ERRORLEVEL 1 (
@@ -30,9 +30,9 @@ echo [INFO] Place input files in the '%SCRIPT_DIR%' folder.
 echo.
 
 :: --- Run Docker Container ---
-:: - All arguments (%*) are passed to the Python script (e.g., for --timeout).
-:: - A port (-p) is mapped for the FastAPI server.
-:: - The entire script directory is mounted to /app/host_files for easy file access.
+:: - Forwards all optional arguments (%*) like --timeout to the Python script.
+:: - Maps the port (-p) for the FastAPI server.
+:: - Mounts the script directory (-v) to /app/host_files for easy file access.
 docker run ^
   --rm ^
   -it ^
